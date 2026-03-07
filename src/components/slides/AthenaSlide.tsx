@@ -3,7 +3,7 @@ import Slide from "@/components/Slide";
 const AthenaSlide = () => {
   return (
     <Slide variant="centered">
-      <div className="flex flex-col items-center justify-center w-full min-h-[60vh] gap-8">
+      <div className="flex flex-col items-center justify-center w-full min-h-[60vh] gap-16">
         <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground tracking-tight">
           NUMINA
         </h2>
