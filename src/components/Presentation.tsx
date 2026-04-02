@@ -15,8 +15,8 @@ const Presentation = ({ children, contentSlideCount: contentSlideCountProp }: Pr
   const [isAnimating, setIsAnimating] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const totalSlides = children.length;
-  const contentSlideCount = contentSlideCountProp ?? totalSlides - 1;
-  const isInAppendix = currentSlide > contentSlideCount;
+  const contentSlideCount = contentSlideCountProp ?? totalSlides;
+  const isInAppendix = currentSlide >= contentSlideCount;
 
   const goToSlide = useCallback((index: number, dir: "next" | "prev" = "next") => {
     if (isAnimating) return;
