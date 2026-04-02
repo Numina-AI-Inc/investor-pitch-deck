@@ -11,14 +11,14 @@ import FeaturesSlide from "@/components/slides/FeaturesSlide";
 import HockeyStickSlide from "@/components/slides/HockeyStickSlide";
 import ControlSlide from "@/components/slides/ControlSlide";
 import MarketExpansionSlide from "@/components/slides/MarketExpansionSlide";
-import MomentumSlide from "@/components/slides/MomentumSlide";
+
 import CTASlide from "@/components/slides/CTASlide";
 
 
 const Index = () => {
   return (
     <FeatureModalsProvider>
-      <Presentation contentSlideCount={12}>
+      <Presentation contentSlideCount={11}>
         <TitleSlide />
         <InsightSlide />
         <ProblemSlide />
@@ -29,7 +29,6 @@ const Index = () => {
         <ControlSlide />
         <HockeyStickSlide />
         <MarketExpansionSlide />
-        <MomentumSlide />
         <CTASlide />
       </Presentation>
       <FeatureModals />
