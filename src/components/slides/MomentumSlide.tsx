@@ -1,7 +1,14 @@
 import { Settings, Handshake, TrendingUp } from "lucide-react";
 import Slide from "@/components/Slide";
 
-const columns = [
+type Column = {
+  icon?: typeof Settings;
+  logo?: string;
+  title: string;
+  bullets: string[];
+};
+
+const columns: Column[] = [
   {
     icon: Settings,
     title: "Product Ready",
@@ -29,6 +36,15 @@ const columns = [
       "User-centered from day one",
     ],
   },
+  {
+    logo: "/dartmouth-logo.png",
+    title: "Institutional Backing",
+    bullets: [
+      "Backed by Dartmouth's Conrades Distinguished Fellowship",
+      "Magnuson Center for Entrepreneurship support",
+      "Access to alumni network for mentorship",
+    ],
+  },
 ];
 
 const MomentumSlide = () => {
@@ -46,7 +62,7 @@ const MomentumSlide = () => {
           We've validated the problem and proven the solution
         </p>
 
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-10">
+        <div className="grid md:grid-cols-4 gap-6 lg:gap-8 mb-10">
           {columns.map((col, index) => (
             <div
               key={index}
