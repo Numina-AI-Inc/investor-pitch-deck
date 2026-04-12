@@ -69,9 +69,15 @@ const MomentumSlide = () => {
               className="feature-card animate-fade-up p-6 md:p-7 flex flex-col h-full"
               style={{ animationDelay: `${150 + index * 100}ms` }}
             >
-              <div className="step-number w-14 h-14 mb-5 shrink-0">
-                <col.icon className="w-6 h-6" />
-              </div>
+              {col.logo ? (
+                <div className="w-14 h-14 mb-5 shrink-0 flex items-center justify-center rounded-full border border-primary/20 bg-white/10 backdrop-blur-sm">
+                  <img src={col.logo} alt="Dartmouth" className="h-8 w-auto invert brightness-200" />
+                </div>
+              ) : col.icon ? (
+                <div className="step-number w-14 h-14 mb-5 shrink-0">
+                  <col.icon className="w-6 h-6" />
+                </div>
+              ) : null}
               <h3 className="text-xl md:text-2xl font-bold mb-4">{col.title}</h3>
               <ul className="space-y-4 text-sm md:text-base text-muted-foreground leading-relaxed flex-1 list-none pl-0">
                 {col.bullets.map((bullet, i) => (
