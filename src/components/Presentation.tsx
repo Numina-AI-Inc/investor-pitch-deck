@@ -15,8 +15,8 @@ const Presentation = ({ children, contentSlideCount: contentSlideCountProp }: Pr
   const [isAnimating, setIsAnimating] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const totalSlides = children.length;
-  const contentSlideCount = contentSlideCountProp ?? totalSlides;
-  const isInAppendix = currentSlide >= contentSlideCount;
+  const contentSlideCount = contentSlideCountProp ?? totalSlides - 1;
+  const isInAppendix = currentSlide > contentSlideCount;
 
   const goToSlide = useCallback((index: number, dir: "next" | "prev" = "next") => {
     if (isAnimating) return;
@@ -182,29 +182,33 @@ const Presentation = ({ children, contentSlideCount: contentSlideCountProp }: Pr
       </button>
 
       {/* Progress bar (main content only; hidden on Athena and in appendix) */}
-      {!isInAppendix && (
+      {currentSlide > 0 && !isInAppendix && (
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2">
-          {Array.from({ length: contentSlideCount }).map((_, index) => (
+          {Array.from({ length: contentSlideCount }).map((_, index) => {
+            const slideIndex = index + 1;
+            return (
               <button
                 key={index}
                 onClick={(e) => { 
                   e.stopPropagation(); 
-                  goToSlide(index, index > currentSlide ? "next" : "prev"); 
+                  goToSlide(slideIndex, slideIndex > currentSlide ? "next" : "prev"); 
                 }}
                 className={cn(
                   "h-1.5 rounded-full transition-all duration-300",
-                  index === currentSlide 
+                  slideIndex === currentSlide 
                     ? "w-8 bg-primary" 
                     : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/50"
                 )}
               />
-          ))}
+            );
+          })}
         </div>
       )}
 
-      {!isInAppendix && (
+      {/* Slide counter (main content only; hidden on Athena and in appendix) */}
+      {currentSlide > 0 && !isInAppendix && (
         <div className="absolute bottom-8 right-8 z-50 text-sm text-muted-foreground font-medium">
-          {currentSlide + 1} / {contentSlideCount}
+          {currentSlide} / {contentSlideCount}
         </div>
       )}
 
