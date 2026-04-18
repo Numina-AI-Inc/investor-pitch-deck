@@ -55,7 +55,7 @@ const HockeyStickSlide = () => {
   const [showMetrics, setShowMetrics] = useState(false);
   const [clientCount, setClientCount] = useState(15);
   const [showClosing, setShowClosing] = useState(false);
-  const { registerNavInterceptor, currentSlide } = usePresentation();
+  const { registerNavInterceptor, unregisterNavInterceptor, currentSlide } = usePresentation();
   const phaseRef = useRef(phase);
   const showClosingRef = useRef(showClosing);
   useEffect(() => { phaseRef.current = phase; }, [phase]);
@@ -97,20 +97,18 @@ const HockeyStickSlide = () => {
 
   // Intercept next: if closing not yet shown, show it instead of advancing
   useEffect(() => {
-    registerNavInterceptor((dir) => {
+    const interceptor = (dir: "next" | "prev") => {
       if (!isActive()) return false;
       if (dir !== "next") return false;
-      // If still animating the curve, jump to results
-      if (phaseRef.current < 5 || !showClosingRef.current) {
-        if (!showClosingRef.current) {
-          setShowClosing(true);
-          return true;
-        }
+      if (!showClosingRef.current) {
+        setShowClosing(true);
+        return true;
       }
       return false;
-    });
-    return () => registerNavInterceptor(null);
-  }, [registerNavInterceptor, isActive]);
+    };
+    registerNavInterceptor(interceptor);
+    return () => unregisterNavInterceptor(interceptor);
+  }, [registerNavInterceptor, unregisterNavInterceptor, isActive]);
 
   useEffect(() => {
     if (!isPlaying) return;
