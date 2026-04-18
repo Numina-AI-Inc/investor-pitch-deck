@@ -55,7 +55,7 @@ const HockeyStickSlide = () => {
   const [showMetrics, setShowMetrics] = useState(false);
   const [clientCount, setClientCount] = useState(15);
   const [showClosing, setShowClosing] = useState(false);
-  const { registerNavInterceptor, currentSlide } = usePresentation();
+  const { registerNavInterceptor, unregisterNavInterceptor, currentSlide } = usePresentation();
   const phaseRef = useRef(phase);
   const showClosingRef = useRef(showClosing);
   useEffect(() => { phaseRef.current = phase; }, [phase]);
