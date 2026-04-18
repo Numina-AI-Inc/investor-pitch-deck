@@ -26,13 +26,20 @@ const Presentation = ({ children, contentSlideCount: contentSlideCountProp }: Pr
     setTimeout(() => setIsAnimating(false), 600);
   }, [isAnimating]);
 
+  const navInterceptorRef = useRef<NavInterceptor | null>(null);
+  const registerNavInterceptor = useCallback((fn: NavInterceptor | null) => {
+    navInterceptorRef.current = fn;
+  }, []);
+
   const nextSlide = useCallback(() => {
+    if (navInterceptorRef.current?.("next")) return;
     if (currentSlide < totalSlides - 1) {
       goToSlide(currentSlide + 1, "next");
     }
   }, [currentSlide, totalSlides, goToSlide]);
 
   const prevSlide = useCallback(() => {
+    if (navInterceptorRef.current?.("prev")) return;
     if (currentSlide > 0) {
       goToSlide(currentSlide - 1, "prev");
     }
