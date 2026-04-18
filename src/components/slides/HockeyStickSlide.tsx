@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   AreaChart,
@@ -9,7 +9,7 @@ import {
   ReferenceLine,
 } from "recharts";
 import Slide from "@/components/Slide";
-import { Play, RotateCcw } from "lucide-react";
+import { usePresentation } from "@/contexts/PresentationContext";
 
 // Capacity curve: derived capacity equation from P–K (see appendix).
 // y(x) = Y0 · M(x/100), M(r) = [1 + α(1 + C_s²)] / [1 + α(1 + (1−r)C_s²)], α = ρ/(2(1−ρ)).
@@ -42,6 +42,10 @@ const generateData = () => {
 
 const fullData = generateData();
 
+// Speed multiplier — higher = faster animation
+const SPEED = 2.5;
+const ms = (n: number) => Math.max(1, Math.round(n / SPEED));
+
 const HockeyStickSlide = () => {
   const [phase, setPhase] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -51,6 +55,11 @@ const HockeyStickSlide = () => {
   const [showMetrics, setShowMetrics] = useState(false);
   const [clientCount, setClientCount] = useState(15);
   const [showClosing, setShowClosing] = useState(false);
+  const { registerNavInterceptor, currentSlide } = usePresentation();
+  const phaseRef = useRef(phase);
+  const showClosingRef = useRef(showClosing);
+  useEffect(() => { phaseRef.current = phase; }, [phase]);
+  useEffect(() => { showClosingRef.current = showClosing; }, [showClosing]);
 
   const resetAnimation = useCallback(() => {
     setPhase(0);
@@ -69,11 +78,39 @@ const HockeyStickSlide = () => {
     setPhase(1);
   }, [resetAnimation]);
 
-  const showClosingOverlay = useCallback(() => {
-    if (phase === 5 && !showClosing) {
-      setShowClosing(true);
+
+  // Detect whether this slide is the active one
+  const isActive = useCallback(() => {
+    const el = document.querySelector('[data-slide="hockey-stick"]');
+    const wrapper = el?.closest('.absolute.inset-0');
+    return wrapper?.classList.contains('opacity-100') ?? false;
+  }, []);
+
+  // Auto-play when slide becomes active; reset when leaving
+  useEffect(() => {
+    if (isActive()) {
+      startAnimation();
+    } else {
+      resetAnimation();
     }
-  }, [phase, showClosing]);
+  }, [currentSlide, isActive, startAnimation, resetAnimation]);
+
+  // Intercept next: if closing not yet shown, show it instead of advancing
+  useEffect(() => {
+    registerNavInterceptor((dir) => {
+      if (!isActive()) return false;
+      if (dir !== "next") return false;
+      // If still animating the curve, jump to results
+      if (phaseRef.current < 5 || !showClosingRef.current) {
+        if (!showClosingRef.current) {
+          setShowClosing(true);
+          return true;
+        }
+      }
+      return false;
+    });
+    return () => registerNavInterceptor(null);
+  }, [registerNavInterceptor, isActive]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -90,18 +127,18 @@ const HockeyStickSlide = () => {
           clearInterval(drawInterval);
           setPhase(2);
         }
-      }, 50);
+      }, ms(50));
       timers.push(drawInterval as unknown as NodeJS.Timeout);
     }
 
     if (phase === 2) {
-      timers.push(setTimeout(() => setPhase(3), 1500));
+      timers.push(setTimeout(() => setPhase(3), ms(1500)));
     }
 
     if (phase === 3) {
-      timers.push(setTimeout(() => setShowNuminaPoint(true), 500));
-      timers.push(setTimeout(() => setShowYAxisLine(true), 1000));
-      timers.push(setTimeout(() => setShowMetrics(true), 1500));
+      timers.push(setTimeout(() => setShowNuminaPoint(true), ms(500)));
+      timers.push(setTimeout(() => setShowYAxisLine(true), ms(1000)));
+      timers.push(setTimeout(() => setShowMetrics(true), ms(1500)));
 
       let count = 15;
       const countInterval = setInterval(() => {
@@ -111,17 +148,17 @@ const HockeyStickSlide = () => {
         } else {
           clearInterval(countInterval);
         }
-      }, 50);
+      }, ms(50));
       timers.push(countInterval as unknown as NodeJS.Timeout);
 
-      timers.push(setTimeout(() => setPhase(4), 2500));
+      timers.push(setTimeout(() => setPhase(4), ms(2500)));
     }
 
     if (phase === 4) {
       timers.push(setTimeout(() => {
         setIsPlaying(false);
         setPhase(5);
-      }, 1200));
+      }, ms(1200)));
     }
 
     return () => {
@@ -131,7 +168,7 @@ const HockeyStickSlide = () => {
 
   return (
     <Slide>
-      <div className="max-w-6xl mx-auto w-full h-full flex flex-col">
+      <div data-slide="hockey-stick" className="max-w-6xl mx-auto w-full h-full flex flex-col">
         {/* Header with causal chain */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -157,33 +194,7 @@ const HockeyStickSlide = () => {
           </div>
         </motion.div>
 
-        {/* Controls */}
-        <div className="flex justify-center gap-4 mb-3">
-          <button
-            onClick={startAnimation}
-            disabled={isPlaying}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30 hover:bg-primary/30 transition-colors disabled:opacity-50"
-          >
-            <Play className="w-4 h-4" />
-            <span className="text-sm">Play Animation</span>
-          </button>
-          {phase === 5 && !showClosing && (
-            <button
-              onClick={showClosingOverlay}
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20 border border-green-500/30 hover:bg-green-500/30 transition-colors animate-pulse"
-            >
-              <Play className="w-4 h-4" />
-              <span className="text-sm">Show Results</span>
-            </button>
-          )}
-          <button
-            onClick={resetAnimation}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-card/50 border border-border/50 hover:bg-card transition-colors"
-          >
-            <RotateCcw className="w-4 h-4" />
-            <span className="text-sm">Reset</span>
-          </button>
-        </div>
+        {/* Controls removed — animation auto-plays; navigate with arrow keys */}
 
         {/* Chart */}
         <div className="flex-1 relative min-h-[280px]">
@@ -401,17 +412,6 @@ const HockeyStickSlide = () => {
           Curve from derived capacity equation y(x) = Y<sub>0</sub>·M(x/100) (P–K, M/G/1; ρ = 0.9, C<sub>s</sub>² = 3, Y<sub>0</sub> = 15). Full derivation and assumptions in appendix.
         </motion.div>
 
-        {/* Hint */}
-        {!isPlaying && animatedData.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-            className="text-center text-muted-foreground text-sm mt-1"
-          >
-            Click "Play Animation" to see the capacity curve
-          </motion.div>
-        )}
       </div>
     </Slide>
   );
