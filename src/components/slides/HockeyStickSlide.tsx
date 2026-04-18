@@ -171,7 +171,7 @@ const HockeyStickSlide = () => {
 
   return (
     <Slide>
-      <div className="max-w-6xl mx-auto w-full h-full flex flex-col">
+      <div data-slide="hockey-stick" className="max-w-6xl mx-auto w-full h-full flex flex-col">
         {/* Header with causal chain */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
