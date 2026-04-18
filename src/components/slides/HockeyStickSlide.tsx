@@ -42,6 +42,10 @@ const generateData = () => {
 
 const fullData = generateData();
 
+// Speed multiplier — higher = faster animation
+const SPEED = 2.5;
+const ms = (n: number) => Math.max(1, Math.round(n / SPEED));
+
 const HockeyStickSlide = () => {
   const [phase, setPhase] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -51,6 +55,11 @@ const HockeyStickSlide = () => {
   const [showMetrics, setShowMetrics] = useState(false);
   const [clientCount, setClientCount] = useState(15);
   const [showClosing, setShowClosing] = useState(false);
+  const { registerNavInterceptor, currentSlide } = usePresentation();
+  const phaseRef = useRef(phase);
+  const showClosingRef = useRef(showClosing);
+  useEffect(() => { phaseRef.current = phase; }, [phase]);
+  useEffect(() => { showClosingRef.current = showClosing; }, [showClosing]);
 
   const resetAnimation = useCallback(() => {
     setPhase(0);
@@ -70,10 +79,41 @@ const HockeyStickSlide = () => {
   }, [resetAnimation]);
 
   const showClosingOverlay = useCallback(() => {
-    if (phase === 5 && !showClosing) {
-      setShowClosing(true);
+    setShowClosing(true);
+  }, []);
+
+  // Detect whether this slide is the active one
+  const isActive = useCallback(() => {
+    const el = document.querySelector('[data-slide="hockey-stick"]');
+    const wrapper = el?.closest('.absolute.inset-0');
+    return wrapper?.classList.contains('opacity-100') ?? false;
+  }, []);
+
+  // Auto-play when slide becomes active; reset when leaving
+  useEffect(() => {
+    if (isActive()) {
+      startAnimation();
+    } else {
+      resetAnimation();
     }
-  }, [phase, showClosing]);
+  }, [currentSlide, isActive, startAnimation, resetAnimation]);
+
+  // Intercept next: if closing not yet shown, show it instead of advancing
+  useEffect(() => {
+    registerNavInterceptor((dir) => {
+      if (!isActive()) return false;
+      if (dir !== "next") return false;
+      // If still animating the curve, jump to results
+      if (phaseRef.current < 5 || !showClosingRef.current) {
+        if (!showClosingRef.current) {
+          setShowClosing(true);
+          return true;
+        }
+      }
+      return false;
+    });
+    return () => registerNavInterceptor(null);
+  }, [registerNavInterceptor, isActive]);
 
   useEffect(() => {
     if (!isPlaying) return;
