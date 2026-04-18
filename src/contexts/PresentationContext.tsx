@@ -10,6 +10,8 @@ export interface PresentationContextValue {
   contentSlideCount: number;
   /** Register a function that can intercept next/prev navigation. Return true to consume the action. */
   registerNavInterceptor: (fn: NavInterceptor | null) => void;
+  /** Remove a previously registered interceptor. */
+  unregisterNavInterceptor: (fn: NavInterceptor) => void;
 }
 
 const PresentationContext = createContext<PresentationContextValue | null>(null);
