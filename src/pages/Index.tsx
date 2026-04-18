@@ -12,7 +12,7 @@ import FeaturesSlide from "@/components/slides/FeaturesSlide";
 import HockeyStickSlide from "@/components/slides/HockeyStickSlide";
 import ControlSlide from "@/components/slides/ControlSlide";
 import ImpactSlide from "@/components/slides/ImpactSlide";
-import MarketExpansionSlide from "@/components/slides/MarketExpansionSlide";
+
 import MomentumSlide from "@/components/slides/MomentumSlide";
 import CTASlide from "@/components/slides/CTASlide";
 import AppendixTitleSlide from "@/components/slides/appendix/AppendixTitleSlide";
@@ -29,7 +29,7 @@ import AppendixDocumentsSlide from "@/components/slides/appendix/AppendixDocumen
 const Index = () => {
   return (
     <FeatureModalsProvider>
-      <Presentation contentSlideCount={13}>
+      <Presentation contentSlideCount={12}>
         <AthenaSlide />
         <TitleSlide />
         <InsightSlide />
@@ -40,7 +40,7 @@ const Index = () => {
         <FeaturesSlide />
         <ControlSlide />
         <HockeyStickSlide />
-        <MarketExpansionSlide />
+        
         <ImpactSlide />
         <MomentumSlide />
         <CTASlide />
