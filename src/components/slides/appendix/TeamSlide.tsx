@@ -1,6 +1,5 @@
 import Slide from "@/components/Slide";
 import { User, TrendingUp, Code } from "lucide-react";
-import { AppendixBackToTOC } from "./AppendixBackToTOC";
 
 const team = [
   {
@@ -27,11 +26,8 @@ const TeamSlide = () => {
   return (
     <Slide>
       <div className="max-w-5xl mx-auto">
-        <div className="flex justify-end mb-4" onClick={(e) => e.stopPropagation()}>
-          <AppendixBackToTOC />
-        </div>
         <span className="text-primary text-sm font-medium tracking-widest uppercase mb-6 block">
-          Appendix — Team
+          Team
         </span>
         <h2 className="text-3xl md:text-4xl font-bold mb-2">
           Numina <span className="text-primary">founding team</span>

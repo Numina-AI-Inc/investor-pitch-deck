@@ -44,7 +44,9 @@ const Index = () => {
         
         <ImpactSlide />
         <MomentumSlide />
+        <TeamSlide />
         <GTMSlide />
+        <CTASlide />
         <CTASlide />
         {/* Appendix */}
         <AppendixTitleSlide />
