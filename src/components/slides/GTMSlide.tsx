@@ -62,7 +62,7 @@ const GTMSlide = () => {
         </span>
 
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-tight mb-6 animate-fade-up delay-100 max-w-5xl">
-          <span className="text-primary">Accelerate adoption</span> with successful <span className="text-primary">pilots and GTM pipelines</span>
+          Accelerate adoption with successful <span className="text-primary">pilots and GTM pipelines</span>
         </h2>
 
         <div className="space-y-3">
