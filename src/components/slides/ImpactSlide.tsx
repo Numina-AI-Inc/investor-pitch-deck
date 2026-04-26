@@ -36,7 +36,7 @@ const ImpactSlide = () => {
                 </div>
 
                 {/* Vertical bar — Accountants (Depth) */}
-                <div className="flex items-stretch gap-4 mt-2">
+                <div className="flex items-stretch gap-4 mt-16">
                   <div className="flex flex-col items-center justify-center">
                     <span className="text-primary text-lg font-bold tracking-widest uppercase [writing-mode:vertical-rl] rotate-180">
                       Depth
@@ -44,7 +44,7 @@ const ImpactSlide = () => {
                     <span className="text-primary text-xl mt-2">↓</span>
                   </div>
                   <div className="feature-card p-8 text-center bg-primary/5 border-primary/30 w-64 min-h-[280px] flex flex-col justify-center relative">
-                    <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center text-primary">
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 flex flex-col items-center text-primary">
                       <ArrowUp className="w-8 h-8" strokeWidth={2.5} />
                       <DollarSign className="w-4 h-4 mt-1" strokeWidth={2.5} />
                     </div>
