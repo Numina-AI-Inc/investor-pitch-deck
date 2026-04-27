@@ -79,6 +79,19 @@ const MomentumSlide = () => {
           ))}
         </div>
 
+        <div className="flex items-center justify-center gap-3 mt-6 animate-fade-up delay-500">
+          <div className="w-16 h-12 overflow-hidden shrink-0">
+            <img
+              src="/dartmouth-logo.png"
+              alt="Dartmouth logo"
+              className="h-full w-auto max-w-none object-left-top object-contain select-none brightness-0 invert"
+              draggable={false}
+            />
+          </div>
+          <p className="ml-2 text-sm md:text-base font-semibold tracking-tight leading-tight text-foreground">
+            Backed by Dartmouth's <span className="text-primary">Conrades Distinguished Fellowship</span>
+          </p>
+        </div>
       </div>
     </Slide>
   );
