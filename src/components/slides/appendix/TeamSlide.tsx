@@ -4,20 +4,26 @@ const team = [
   {
     photo: "/1756873360937.jpeg",
     name: "Harshul Chandrashekhar",
-    role: "Product lead",
-    text: "Software engineering background; leads product and bridges technical capabilities with market needs. Echo framework: rapid prototypes, user validation, technical requirements. MEM coursework in Pricing Strategy and Analytics.",
+    role: "Product Strategy Lead",
+    text: "Translates the core customer pain point into product direction, ensuring every feature maps to measurable accounting workflow outcomes.",
   },
   {
     photo: "/1742413688007.jpeg",
     name: "Manish Reddy",
-    role: "Sales & client outreach",
-    text: "Leads client acquisition and stakeholder engagement. Reached initial CPA stakeholders and guided pain-point discovery. Recognizes niche problems and leverages networks for rapid validation.",
+    role: "Vision, Strategy & Outreach",
+    text: "Shapes market narrative and drives founder-led outreach with CPA stakeholders to convert insight into validated commercial demand.",
   },
   {
     photo: "/1725953369695.jpeg",
     name: "Muhammad Aatiq",
-    role: "Technical lead",
-    text: "Builds production-ready solutions. Once demand is validated and requirements are clear, transforms prototypes into robust, scalable, client-deployable systems. Enterprise-grade reliability.",
+    role: "Engineering Lead",
+    text: "Owns technical execution, turning validated requirements into secure, production-ready systems that scale across client environments.",
+  },
+  {
+    photo: "/1691457413564.jpeg",
+    name: "Animesh Kumar",
+    role: "ERP Consulting & Integration",
+    text: "Brings enterprise consulting depth across ERP and accounting stacks, guiding how Numina fits into real-world finance, compliance, and reporting workflows.",
   },
 ];
 
@@ -32,10 +38,10 @@ const TeamSlide = () => {
           Numina <span className="text-primary">founding team</span>
         </h2>
         <p className="text-muted-foreground text-lg mb-10">
-          Product strategy, sales & validation, and technical execution
+          One founding team spanning product strategy, market development, production engineering, and ERP integration expertise
         </p>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
           {team.map((member, i) => (
             <div key={i} className="feature-card p-6 flex flex-col h-full">
               <div className="w-28 h-28 mb-5 shrink-0 rounded-full overflow-hidden border border-border/50 bg-muted/30">
